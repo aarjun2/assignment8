@@ -1,24 +1,35 @@
 import logo from './logo.svg';
 import './App.css';
-
+import { useState } from 'react';
 function App() {
+  const [todo, setTodo] = useState([]);
+  const [val, setVal] = useState('');
+
+  const handleClick = () => {
+    if (val.trim() !== '') {
+      setTodo([...todo, val]);
+      setVal('');
+    }
+  }
+
+  const markAsCompleted = (index) => {
+    const updatedTodos = [...todo];
+    updatedTodos[index] = <strike>{updatedTodos[index]}</strike>;
+    setTodo(updatedTodos);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <input type="text" value={val} placeholder="Enter a task"onChange={e => setVal(e.target.value)}/>
+      <button onClick={handleClick}> Add todo </button>
+      <ul>
+        {todo.map((task, index) => (
+          <li key={index} onClick={() => markAsCompleted(index)}>
+            {task}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
